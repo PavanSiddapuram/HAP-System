@@ -33,8 +33,10 @@ def send_appointment_confirmation(event_data: dict) -> bool:
     user_email = event_data.get("userEmail", "unknown")
     user_name = event_data.get("userName", "Patient")
     doctor_name = event_data.get("doctorName", "Doctor")
-    appointment_date = event_data.get("appointmentDate", "N/A")
-    time_slot = event_data.get("timeSlot", "N/A")
+    appointment_date = event_data.get("slotDate", "N/A")
+    start_time = event_data.get("startTime", "N/A")
+    end_time = event_data.get("endTime", "N/A")
+    time_slot = f"{start_time} - {end_time}"
 
     logger.info("📧 Sending appointment confirmation to %s", user_email)
     logger.info(
@@ -89,8 +91,10 @@ def send_cancellation_notification(event_data: dict) -> bool:
     user_email = event_data.get("userEmail", "unknown")
     user_name = event_data.get("userName", "Patient")
     doctor_name = event_data.get("doctorName", "Doctor")
-    appointment_date = event_data.get("appointmentDate", "N/A")
-    time_slot = event_data.get("timeSlot", "N/A")
+    appointment_date = event_data.get("slotDate", "N/A")
+    start_time = event_data.get("startTime", "N/A")
+    end_time = event_data.get("endTime", "N/A")
+    time_slot = f"{start_time} - {end_time}"
     reason = event_data.get("reason", "No reason provided")
 
     logger.info("📧 Sending cancellation notification to %s", user_email)

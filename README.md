@@ -28,11 +28,11 @@ A scalable, event-driven healthcare appointment management platform built with *
 
 ```
 ┌──────────────┐     HTTP/JWT      ┌──────────────────┐     AMQP Events     ┌──────────────────┐
-│              │ ◄──────────────► │                  │ ──────────────────► │                  │
-│   React UI   │                  │  Spring Boot API  │                    │  Python Worker   │
-│  (Vite)      │                  │  (Port 8080)      │                    │  Service         │
-│              │                  │                  │                    │                  │
-└──────────────┘                  └────────┬─────────┘                    └────────┬─────────┘
+│              │ ◄──────────────► │                  │ ──────────────────► │                   │
+│   React UI   │                  │  Spring Boot API  │                    │  Python Worker    │
+│  (Vite)      │                  │  (Port 8080)      │                    │  Service          │
+│              │                  │                  │                     │                   │
+└──────────────┘                  └────────┬─────────┘                     └────────┬──────────┘
                                           │                                       │
                                           │          ┌──────────────┐             │
                                           │          │              │             │
@@ -108,13 +108,13 @@ A scalable, event-driven healthcare appointment management platform built with *
 
 ```bash
 # 1. Clone the repository
-git clone <repository-url>
-cd mykare-healthcare
+git clone https://github.com/PavanSiddapuram/HAP-System.git
+cd HAP-System
 
 # 2. Start all services
-docker-compose up --build
+docker compose up --build
 
-# 3. Wait for all services to be healthy (takes ~60-90 seconds on first run)
+# 3. Wait for all services to be healthy (~60-90 seconds on first run)
 ```
 
 ### Access Points
@@ -426,6 +426,25 @@ mykare-healthcare/
 
 ---
 
+## 🧪 Testing
+
+Three test scripts are included. Run them against the live Docker stack (`docker compose up --build`).
+
+```bash
+# 1. Happy-path E2E: register → book → confirm → cancel → slot released
+python functional_test.py
+
+# 2. Edge cases: auth validation, security boundaries, business logic
+python e2e_edge_case_test.py
+
+# 3. Concurrency: 5 threads race to book the same slot — exactly 1 wins
+python concurrency_test.py
+```
+
+All scripts require only the Python standard library (`urllib`, `threading`) — no extra dependencies.
+
+---
+
 ## 📊 Monitoring
 
 ### RabbitMQ Management UI
@@ -438,12 +457,12 @@ Access the RabbitMQ management dashboard at [http://localhost:15672](http://loca
 ### Application Logs
 ```bash
 # View all service logs
-docker-compose logs -f
+docker compose logs -f
 
 # View specific service logs
-docker-compose logs -f backend
-docker-compose logs -f worker
-docker-compose logs -f frontend
+docker compose logs -f backend
+docker compose logs -f worker
+docker compose logs -f frontend
 ```
 
 ---
@@ -452,10 +471,10 @@ docker-compose logs -f frontend
 
 ```bash
 # Stop all services
-docker-compose down
+docker compose down
 
 # Stop and remove volumes (clears database)
-docker-compose down -v
+docker compose down -v
 ```
 
 ---
